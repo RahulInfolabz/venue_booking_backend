@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "Venue Discovery and Reservation Platform",
+    "description": "Complete API collection for Venue Discovery and Reservation Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [{ "key": "base_url", "value": "http://localhost:8000", "type": "string" }],
+  "item": [
+    {
+      "name": "🔐 Common",
+      "item": [
+        { "name": "Signup", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/signup", "host": ["{{base_url}}"], "path": ["signup"] }, "body": { "mode": "raw", "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@gmail.com\",\n  \"phone\": \"9900000002\",\n  \"password\": \"Rahul@123\",\n  \"address\": \"22, Satellite Road, Ahmedabad\"\n}" } } },
+        { "name": "Login (User)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/login", "host": ["{{base_url}}"], "path": ["login"] }, "body": { "mode": "raw", "raw": "{\n  \"email\": \"rahul@gmail.com\",\n  \"password\": \"Rahul@123\"\n}" } } },
+        { "name": "Login (Admin)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/login", "host": ["{{base_url}}"], "path": ["login"] }, "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@venue.com\",\n  \"password\": \"Admin@123\"\n}" } } },
+        { "name": "Logout", "request": { "method": "GET", "url": { "raw": "{{base_url}}/logout", "host": ["{{base_url}}"], "path": ["logout"] } } },
+        { "name": "Session", "request": { "method": "GET", "url": { "raw": "{{base_url}}/session", "host": ["{{base_url}}"], "path": ["session"] } } },
+        { "name": "Change Password", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/changePassword", "host": ["{{base_url}}"], "path": ["changePassword"] }, "body": { "mode": "raw", "raw": "{\n  \"email\": \"rahul@gmail.com\",\n  \"newPassword\": \"NewPass@123\"\n}" } } }
+      ]
+    },
+    {
+      "name": "🌐 Public",
+      "item": [
+        { "name": "Get All Cities", "request": { "method": "GET", "url": { "raw": "{{base_url}}/cities", "host": ["{{base_url}}"], "path": ["cities"] } } },
+        { "name": "Get All Occasions", "request": { "method": "GET", "url": { "raw": "{{base_url}}/occasions", "host": ["{{base_url}}"], "path": ["occasions"] } } },
+        { "name": "Get All Venue Types", "request": { "method": "GET", "url": { "raw": "{{base_url}}/venueTypes", "host": ["{{base_url}}"], "path": ["venueTypes"] } } },
+        { "name": "Get All Venues", "request": { "method": "GET", "url": { "raw": "{{base_url}}/venues", "host": ["{{base_url}}"], "path": ["venues"] } } },
+        { "name": "Get Venues — Filter by City", "request": { "method": "GET", "url": { "raw": "{{base_url}}/venues?city_id=CITY_ID_HERE", "host": ["{{base_url}}"], "path": ["venues"], "query": [{ "key": "city_id", "value": "CITY_ID_HERE" }] } } },
+        { "name": "Get Venues — Filter by Occasion", "request": { "method": "GET", "url": { "raw": "{{base_url}}/venues?occasion_id=OCCASION_ID_HERE", "host": ["{{base_url}}"], "path": ["venues"], "query": [{ "key": "occasion_id", "value": "OCCASION_ID_HERE" }] } } },
+        { "name": "Get Venues — Filter by Venue Type", "request": { "method": "GET", "url": { "raw": "{{base_url}}/venues?venue_type_id=VENUE_TYPE_ID_HERE", "host": ["{{base_url}}"], "path": ["venues"], "query": [{ "key": "venue_type_id", "value": "VENUE_TYPE_ID_HERE" }] } } },
+        { "name": "Get Venues — Filter by Price Range", "request": { "method": "GET", "url": { "raw": "{{base_url}}/venues?min_price=50000&max_price=150000", "host": ["{{base_url}}"], "path": ["venues"], "query": [{ "key": "min_price", "value": "50000" }, { "key": "max_price", "value": "150000" }] } } },
+        { "name": "Get Venue Details", "request": { "method": "GET", "url": { "raw": "{{base_url}}/venues/VENUE_ID_HERE", "host": ["{{base_url}}"], "path": ["venues", "VENUE_ID_HERE"] } } },
+        { "name": "Get All Feedbacks", "request": { "method": "GET", "url": { "raw": "{{base_url}}/feedbacks", "host": ["{{base_url}}"], "path": ["feedbacks"] } } },
+        { "name": "Get Feedbacks by Venue", "request": { "method": "GET", "url": { "raw": "{{base_url}}/feedbacks/VENUE_ID_HERE", "host": ["{{base_url}}"], "path": ["feedbacks", "VENUE_ID_HERE"] } } }
+      ]
+    },
+    {
+      "name": "🟢 User (Session Required)",
+      "item": [
+        { "name": "Get Profile", "request": { "method": "GET", "url": { "raw": "{{base_url}}/user/profile", "host": ["{{base_url}}"], "path": ["user", "profile"] } } },
+        { "name": "Update Profile (with image)", "request": { "method": "POST", "url": { "raw": "{{base_url}}/user/updateProfile", "host": ["{{base_url}}"], "path": ["user", "updateProfile"] }, "body": { "mode": "formdata", "formdata": [{ "key": "name", "value": "Rahul Kumar Sharma", "type": "text" }, { "key": "phone", "value": "9911111111", "type": "text" }, { "key": "address", "value": "New CG Road, Ahmedabad", "type": "text" }, { "key": "profile_image", "src": "", "type": "file" }] } } },
+        { "name": "Book Venue", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/user/bookVenue", "host": ["{{base_url}}"], "path": ["user", "bookVenue"] }, "body": { "mode": "raw", "raw": "{\n  \"venue_id\": \"VENUE_ID_HERE\",\n  \"booking_start_date\": \"2026-03-10\",\n  \"booking_end_date\": \"2026-03-12\",\n  \"booking_time\": \"18:00\"\n}" } } },
+        { "name": "My Bookings", "request": { "method": "GET", "url": { "raw": "{{base_url}}/user/myBookings", "host": ["{{base_url}}"], "path": ["user", "myBookings"] } } },
+        { "name": "Cancel Booking", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/user/cancelBooking", "host": ["{{base_url}}"], "path": ["user", "cancelBooking"] }, "body": { "mode": "raw", "raw": "{\n  \"booking_id\": \"BOOKING_ID_HERE\"\n}" } } },
+        { "name": "Generate Razorpay Order ID", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/user/genOrderId", "host": ["{{base_url}}"], "path": ["user", "genOrderId"] }, "body": { "mode": "raw", "raw": "{\n  \"booking_id\": \"BOOKING_ID_HERE\"\n}" } } },
+        { "name": "Verify Razorpay Payment", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/user/verifyPayment", "host": ["{{base_url}}"], "path": ["user", "verifyPayment"] }, "body": { "mode": "raw", "raw": "{\n  \"booking_id\": \"BOOKING_ID_HERE\",\n  \"razorpay_order_id\": \"order_XXXX\",\n  \"razorpay_payment_id\": \"pay_XXXX\",\n  \"razorpay_signature\": \"sig_XXXX\"\n}" } } },
+        { "name": "Add Feedback", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/user/addFeedback", "host": ["{{base_url}}"], "path": ["user", "addFeedback"] }, "body": { "mode": "raw", "raw": "{\n  \"venue_id\": \"VENUE_ID_HERE\",\n  \"message\": \"Your venue is absolutely wonderful! The decorations and service were top-notch.\",\n  \"review\": \"Excellent\",\n  \"rating\": 5\n}" } } }
+      ]
+    },
+    {
+      "name": "🔴 Admin (Session Required)",
+      "item": [
+        { "name": "Get All Users", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/users", "host": ["{{base_url}}"], "path": ["admin", "users"] } } },
+        { "name": "Update User Status (Activate)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/updateUserStatus", "host": ["{{base_url}}"], "path": ["admin", "updateUserStatus"] }, "body": { "mode": "raw", "raw": "{\n  \"user_id\": \"USER_ID_HERE\",\n  \"status\": \"Active\"\n}" } } },
+        { "name": "Update User Status (Deactivate)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/updateUserStatus", "host": ["{{base_url}}"], "path": ["admin", "updateUserStatus"] }, "body": { "mode": "raw", "raw": "{\n  \"user_id\": \"USER_ID_HERE\",\n  \"status\": \"Inactive\"\n}" } } },
+        { "name": "Add City", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/addCity", "host": ["{{base_url}}"], "path": ["admin", "addCity"] }, "body": { "mode": "raw", "raw": "{\n  \"name\": \"Mumbai\"\n}" } } },
+        { "name": "Update City", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/updateCity", "host": ["{{base_url}}"], "path": ["admin", "updateCity"] }, "body": { "mode": "raw", "raw": "{\n  \"id\": \"CITY_ID_HERE\",\n  \"name\": \"Mumbai Metro\",\n  \"status\": \"Active\"\n}" } } },
+        { "name": "Delete City", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/deleteCity/CITY_ID_HERE", "host": ["{{base_url}}"], "path": ["admin", "deleteCity", "CITY_ID_HERE"] } } },
+        { "name": "Get All Cities (Admin)", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/cities", "host": ["{{base_url}}"], "path": ["admin", "cities"] } } },
+        { "name": "Add Occasion", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/addOccasion", "host": ["{{base_url}}"], "path": ["admin", "addOccasion"] }, "body": { "mode": "raw", "raw": "{\n  \"name\": \"Graduation Party\"\n}" } } },
+        { "name": "Update Occasion", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/updateOccasion", "host": ["{{base_url}}"], "path": ["admin", "updateOccasion"] }, "body": { "mode": "raw", "raw": "{\n  \"id\": \"OCCASION_ID_HERE\",\n  \"name\": \"Graduation Ceremony\"\n}" } } },
+        { "name": "Delete Occasion", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/deleteOccasion/OCCASION_ID_HERE", "host": ["{{base_url}}"], "path": ["admin", "deleteOccasion", "OCCASION_ID_HERE"] } } },
+        { "name": "Get All Occasions (Admin)", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/occasions", "host": ["{{base_url}}"], "path": ["admin", "occasions"] } } },
+        { "name": "Add Venue Type", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/addVenueType", "host": ["{{base_url}}"], "path": ["admin", "addVenueType"] }, "body": { "mode": "raw", "raw": "{\n  \"name\": \"Rooftop\"\n}" } } },
+        { "name": "Update Venue Type", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/updateVenueType", "host": ["{{base_url}}"], "path": ["admin", "updateVenueType"] }, "body": { "mode": "raw", "raw": "{\n  \"id\": \"VENUE_TYPE_ID_HERE\",\n  \"name\": \"Rooftop Terrace\"\n}" } } },
+        { "name": "Delete Venue Type", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/deleteVenueType/VENUE_TYPE_ID_HERE", "host": ["{{base_url}}"], "path": ["admin", "deleteVenueType", "VENUE_TYPE_ID_HERE"] } } },
+        { "name": "Get All Venue Types (Admin)", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/venueTypes", "host": ["{{base_url}}"], "path": ["admin", "venueTypes"] } } },
+        { "name": "Add Venue (with image)", "request": { "method": "POST", "url": { "raw": "{{base_url}}/admin/addVenue", "host": ["{{base_url}}"], "path": ["admin", "addVenue"] }, "body": { "mode": "formdata", "formdata": [{ "key": "occasion_id", "value": "OCCASION_ID_HERE", "type": "text" }, { "key": "venue_type_id", "value": "VENUE_TYPE_ID_HERE", "type": "text" }, { "key": "city_id", "value": "CITY_ID_HERE", "type": "text" }, { "key": "description", "value": "A luxurious venue with world-class amenities and stunning views.", "type": "text" }, { "key": "price", "value": "100000", "type": "text" }, { "key": "image", "src": "", "type": "file" }] } } },
+        { "name": "Update Venue (with image)", "request": { "method": "POST", "url": { "raw": "{{base_url}}/admin/updateVenue", "host": ["{{base_url}}"], "path": ["admin", "updateVenue"] }, "body": { "mode": "formdata", "formdata": [{ "key": "id", "value": "VENUE_ID_HERE", "type": "text" }, { "key": "price", "value": "120000", "type": "text" }, { "key": "status", "value": "Active", "type": "text" }, { "key": "image", "src": "", "type": "file" }] } } },
+        { "name": "Delete Venue", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/deleteVenue/VENUE_ID_HERE", "host": ["{{base_url}}"], "path": ["admin", "deleteVenue", "VENUE_ID_HERE"] } } },
+        { "name": "Get All Venues (Admin)", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/venues", "host": ["{{base_url}}"], "path": ["admin", "venues"] } } },
+        { "name": "Get All Bookings", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/bookings", "host": ["{{base_url}}"], "path": ["admin", "bookings"] } } },
+        { "name": "Update Booking (Approve)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/updateBooking", "host": ["{{base_url}}"], "path": ["admin", "updateBooking"] }, "body": { "mode": "raw", "raw": "{\n  \"id\": \"BOOKING_ID_HERE\",\n  \"booking_status\": \"Approved\"\n}" } } },
+        { "name": "Update Booking (Cancel)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{base_url}}/admin/updateBooking", "host": ["{{base_url}}"], "path": ["admin", "updateBooking"] }, "body": { "mode": "raw", "raw": "{\n  \"id\": \"BOOKING_ID_HERE\",\n  \"booking_status\": \"Cancelled\"\n}" } } },
+        { "name": "Get All Payments", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/payments", "host": ["{{base_url}}"], "path": ["admin", "payments"] } } },
+        { "name": "Get All Feedbacks (Admin)", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/feedbacks", "host": ["{{base_url}}"], "path": ["admin", "feedbacks"] } } },
+        { "name": "Dashboard Stats", "request": { "method": "GET", "url": { "raw": "{{base_url}}/admin/dashboardStats", "host": ["{{base_url}}"], "path": ["admin", "dashboardStats"] } } }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+====================================================
+  VENUE RESERVATION — MongoDB Collection Names
+====================================================
+
+Database Name : venue_platform
+
+Collections:
+1. users
+2. cities
+3. occasions
+4. venue_types
+5. venues
+6. bookings
+7. payments
+8. feedbacks
+
+====================================================
+  HOW TO RUN SEED DATA
+====================================================
+
+Step 1: Make sure .env has correct MONGO_URI
+Step 2: Run the following command:
+        node seed.js
+
+====================================================
+  RAZORPAY SETUP
+====================================================
+
+Step 1: Create account at https://razorpay.com
+Step 2: Get Key ID and Key Secret from Dashboard
+Step 3: Add to .env:
+        RAZORPAY_KEY_ID=your_key_id
+        RAZORPAY_KEY_SECRET=your_key_secret
+
+====================================================
+  UPLOADS FOLDER STRUCTURE
+====================================================
+
+uploads/
+├── venues/     → Venue images
+└── profiles/   → User profile images
+
+====================================================
