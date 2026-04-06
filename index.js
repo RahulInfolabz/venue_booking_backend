@@ -1,20 +1,17 @@
 const express = require("express");
 const cors = require("cors");
-const session = require("express-session");
 const connectDB = require("./db/dbConnect");
+const authMiddleware = require("./middleware/auth");
 require("dotenv").config();
 
-// ── Multer ────────────────────────────────────────────────────────────────────
 const { venueUpload, profileUpload } = require("./multer/multer");
 
-// ── Common ────────────────────────────────────────────────────────────────────
 const Logout = require("./apis/common/logout");
 const Session = require("./apis/common/session");
 const { Login } = require("./apis/common/login");
 const { Signup } = require("./apis/common/signup");
 const { ChangePassword } = require("./apis/common/changePassword");
 
-// ── Public ────────────────────────────────────────────────────────────────────
 const { GetCities } = require("./apis/user/GetCities");
 const { GetOccasions } = require("./apis/user/GetOccasions");
 const { GetVenueTypes } = require("./apis/user/GetVenueTypes");
@@ -22,7 +19,6 @@ const { GetVenues } = require("./apis/user/GetVenues");
 const { GetVenueDetails } = require("./apis/user/GetVenueDetails");
 const { GetFeedbacks } = require("./apis/user/GetFeedbacks");
 
-// ── User ──────────────────────────────────────────────────────────────────────
 const { GetProfile } = require("./apis/user/GetProfile");
 const { UpdateProfile } = require("./apis/user/UpdateProfile");
 const { BookVenue } = require("./apis/user/BookVenue");
@@ -32,7 +28,6 @@ const { GenOrderId } = require("./apis/user/GenOrderId");
 const { VerifyPayment } = require("./apis/user/VerifyPayment");
 const { AddFeedback } = require("./apis/user/AddFeedback");
 
-// ── Admin ─────────────────────────────────────────────────────────────────────
 const { GetUsers } = require("./apis/admin/GetUsers");
 const { UpdateUserStatus } = require("./apis/admin/UpdateUserStatus");
 const { AddCity } = require("./apis/admin/AddCity");
@@ -57,30 +52,21 @@ const { GetPayments } = require("./apis/admin/GetPayments");
 const { GetAdminFeedbacks } = require("./apis/admin/GetFeedbacks");
 const { DashboardStats } = require("./apis/admin/DashboardStats");
 
-// ─────────────────────────────────────────────────────────────────────────────
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "venue_platform_secret",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
-  })
-);
-
-
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5174"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
+app.use(cors({
+  origin: [
+    "http://localhost:3000", "http://localhost:3001",
+    "http://localhost:5173", "http://localhost:5174",
+    "https://your-frontend.onrender.com", // ← replace with your actual frontend URL
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 
 app.use("/uploads/venues", express.static("uploads/venues"));
 app.use("/uploads/profiles", express.static("uploads/profiles"));
@@ -98,60 +84,52 @@ app.post("/changePassword", ChangePassword);
 app.get("/cities", GetCities);
 app.get("/occasions", GetOccasions);
 app.get("/venueTypes", GetVenueTypes);
-// filters: ?city_id= ?occasion_id= ?venue_type_id= ?min_price= ?max_price=
 app.get("/venues", GetVenues);
-app.get("/venues/:id", GetVenueDetails);
+app.get("/venues/:id", GetVenueDetails);``
 app.get("/feedbacks", GetFeedbacks);
 app.get("/feedbacks/:venue_id", GetFeedbacks);
 
-// ── USER ──────────────────────────────────────────────────────────────────────
-app.get("/user/profile", GetProfile);
-app.post("/user/updateProfile", profileUpload.single("profile_image"), UpdateProfile);
-app.post("/user/bookVenue", BookVenue);
-app.get("/user/myBookings", MyBookings);
-app.post("/user/cancelBooking", CancelBooking);
-app.post("/user/genOrderId", GenOrderId);
-app.post("/user/verifyPayment", VerifyPayment);
-app.post("/user/addFeedback", AddFeedback);
+// ── USER (JWT required) ───────────────────────────────────────────────────────
+app.get("/user/profile", authMiddleware, GetProfile);
+app.post("/user/updateProfile", authMiddleware, profileUpload.single("profile_image"), UpdateProfile);
+app.post("/user/bookVenue", authMiddleware, BookVenue);
+app.get("/user/myBookings", authMiddleware, MyBookings);
+app.post("/user/cancelBooking", authMiddleware, CancelBooking);
+app.post("/user/genOrderId", authMiddleware, GenOrderId);
+app.post("/user/verifyPayment", authMiddleware, VerifyPayment);
+app.post("/user/addFeedback", authMiddleware, AddFeedback);
 
-// ── ADMIN ─────────────────────────────────────────────────────────────────────
-app.get("/admin/users", GetUsers);
-app.post("/admin/updateUserStatus", UpdateUserStatus);
+// ── ADMIN (JWT required) ──────────────────────────────────────────────────────
+app.get("/admin/users", authMiddleware, GetUsers);
+app.post("/admin/updateUserStatus", authMiddleware, UpdateUserStatus);
 
-app.post("/admin/addCity", AddCity);
-app.post("/admin/updateCity", UpdateCity);
-app.get("/admin/deleteCity/:id", DeleteCity);
-app.get("/admin/cities", GetAdminCities);
+app.post("/admin/addCity", authMiddleware, AddCity);
+app.post("/admin/updateCity", authMiddleware, UpdateCity);
+app.get("/admin/deleteCity/:id", authMiddleware, DeleteCity);
+app.get("/admin/cities", authMiddleware, GetAdminCities);
 
-app.post("/admin/addOccasion", AddOccasion);
-app.post("/admin/updateOccasion", UpdateOccasion);
-app.get("/admin/deleteOccasion/:id", DeleteOccasion);
-app.get("/admin/occasions", GetAdminOccasions);
+app.post("/admin/addOccasion", authMiddleware, AddOccasion);
+app.post("/admin/updateOccasion", authMiddleware, UpdateOccasion);
+app.get("/admin/deleteOccasion/:id", authMiddleware, DeleteOccasion);
+app.get("/admin/occasions", authMiddleware, GetAdminOccasions);
 
-app.post("/admin/addVenueType", AddVenueType);
-app.post("/admin/updateVenueType", UpdateVenueType);
-app.get("/admin/deleteVenueType/:id", DeleteVenueType);
-app.get("/admin/venueTypes", GetAdminVenueTypes);
+app.post("/admin/addVenueType", authMiddleware, AddVenueType);
+app.post("/admin/updateVenueType", authMiddleware, UpdateVenueType);
+app.get("/admin/deleteVenueType/:id", authMiddleware, DeleteVenueType);
+app.get("/admin/venueTypes", authMiddleware, GetAdminVenueTypes);
 
-app.post("/admin/addVenue", venueUpload.single("image"), AddVenue);
-app.post("/admin/updateVenue", venueUpload.single("image"), UpdateVenue);
-app.get("/admin/deleteVenue/:id", DeleteVenue);
-app.get("/admin/venues", GetAdminVenues);
+app.post("/admin/addVenue", authMiddleware, venueUpload.single("image"), AddVenue);
+app.post("/admin/updateVenue", authMiddleware, venueUpload.single("image"), UpdateVenue);
+app.get("/admin/deleteVenue/:id", authMiddleware, DeleteVenue);
+app.get("/admin/venues", authMiddleware, GetAdminVenues);
 
-app.get("/admin/bookings", GetBookings);
-app.post("/admin/updateBooking", UpdateBooking);
+app.get("/admin/bookings", authMiddleware, GetBookings);
+app.post("/admin/updateBooking", authMiddleware, UpdateBooking);
 
-app.get("/admin/payments", GetPayments);
-app.get("/admin/feedbacks", GetAdminFeedbacks);
-app.get("/admin/dashboardStats", DashboardStats);
+app.get("/admin/payments", authMiddleware, GetPayments);
+app.get("/admin/feedbacks", authMiddleware, GetAdminFeedbacks);
+app.get("/admin/dashboardStats", authMiddleware, DashboardStats);
 
-// ─────────────────────────────────────────────────────────────────────────────
+app.get("/", (req, res) => { res.send("Welcome to Venue Booking Service Platform API!"); });
 
-app.get("/", (req, res) => {
-  res.send("Welcome to Venue Booking Service Platform API!");
-});
-
-
-app.listen(PORT, () =>
-  console.log(`✅ Venue Reservation server started on PORT ${PORT}!`)
-);
+app.listen(PORT, () => console.log(`✅ Venue Reservation server started on PORT ${PORT}!`));
